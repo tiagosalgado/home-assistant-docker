@@ -1,0 +1,90 @@
+version: "3"
+services:
+  portainer:
+    image: portainer/portainer:latest
+    container_name: "portainer"
+    network_mode: "bridge"
+    restart: "unless-stopped"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/dockers/portainer/data:/data"
+    ports:
+      - 9000:9000
+    logging:
+      options:
+          max-size: 50m
+  hass:
+    image: homeassistant/raspberrypi3-homeassistant:0.68.0
+    container_name: "home-assistant"
+    network_mode: "host"
+    restart: "unless-stopped"
+    depends_on:
+      - samba
+      - influxdb
+      - grafana
+    volumes:
+      - "/home/$USER/share/ha:/config"
+      - "/etc/localtime:/etc/localtime:ro"
+    ports:
+      - 8123:8123
+    devices:
+      - "/dev/mem"
+    cap_add:
+      - SYS_RAWIO
+    logging:
+      options:
+        max-size: 50m
+    privileged: true
+        
+  samba:
+    image: dperson/samba:rpi
+    container_name: "samba"
+    network_mode: "host"
+    restart: "unless-stopped"
+    command: -u "pi;${SAMBA_PI_PASSWORD}" -s "share;/share;no;no;no;pi;pi;pi"
+    volumes:
+      - /home/pi/share:/share
+    ports:
+      - 137:137/udp
+      - 138:138/udp
+      - 139:139
+      - 445:445
+    logging:
+      options:
+        max-size: 50m
+
+  influxdb:
+    image: influxdb:latest
+    container_name: influxdb
+    restart: "unless-stopped"
+    depends_on:
+      - samba
+    volumes:
+      # Data persistency
+      # sudo mkdir -p /srv/docker/influxdb/data
+      - /home/$USER/share/influxdb/data:/var/lib/influxdb
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8083:8083"
+      - "8086:8086"
+      - "8090:8090"
+    logging:
+      options:
+        max-size: 50m
+
+  grafana:
+    image: fg2it/grafana-armhf:v4.6.3
+    container_name: grafana
+    restart: "unless-stopped"
+    depends_on:
+      - influxdb
+    links:
+      - influxdb
+    ports:
+      - "3000:3000"
+    links:
+      - influxdb
+    logging:
+      options:
+        max-size: 50m
+    
