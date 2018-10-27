@@ -14,7 +14,7 @@ services:
       options:
           max-size: 50m
   hass:
-    image: homeassistant/raspberrypi3-homeassistant:0.80.1
+    image: homeassistant/raspberrypi3-homeassistant:0.81.0
     container_name: "home-assistant"
     network_mode: "host"
     restart: "unless-stopped"
