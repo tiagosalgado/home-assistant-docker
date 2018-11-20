@@ -14,7 +14,7 @@ services:
       options:
           max-size: 50m
   hass:
-    image: homeassistant/raspberrypi3-homeassistant:0.81.0
+    image: homeassistant/raspberrypi3-homeassistant:0.82.0
     container_name: "home-assistant"
     network_mode: "host"
     restart: "unless-stopped"
@@ -73,7 +73,7 @@ services:
         max-size: 50m
 
   grafana:
-    image: fg2it/grafana-armhf:v4.6.3
+    image: fg2it/grafana-armhf:v5.1.3
     container_name: grafana
     restart: "unless-stopped"
     depends_on:
