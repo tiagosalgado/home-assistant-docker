@@ -41,7 +41,7 @@ services:
     container_name: "samba"
     network_mode: "host"
     restart: "unless-stopped"
-    command: -u "pi;${SAMBA_PI_PASSWORD}" -s "share;/share;no;no;no;pi;pi;pi"
+    command: -u "pi;${DOCKER_SAMBA_PI_PASSWORD}" -s "share;/share;no;no;no;pi;pi;pi"
     volumes:
       - /home/pi/share:/share
     ports:
@@ -87,4 +87,38 @@ services:
     logging:
       options:
         max-size: 50m
+
+  cloudflare-ddns:
+    image: "oznu/cloudflare-ddns:armhf"
+    container_name: "cloudflare-ddns"
+    restart: "unless-stopped"
+    environment:
+      - EMAIL=${DOCKER_CF_EMAIL}
+      - API_KEY=${DOCKER_CF_API_KEY}
+      - ZONE=${DOCKER_CF_ZONE}
+      - SUBDOMAIN=${DOCKER_CF_DOMAIN}
+      - PROXIED=false
+  letsencrypt:
+    image: lsioarmhf/letsencrypt
+    container_name: letsencrypt
+    restart: unless-stopped
+    cap_add:
+    - NET_ADMIN
+    volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - /home/$USER/share/letsencrypt/config:/config
+    environment:
+    - PGID=1000
+    - PUID=1000
+    - EMAIL=${DOCKER_LE_EMAIL}
+    - URL=${DOCKER_LE_URL}
+    - SUBDOMAINS=${DOCKER_LE_SUBDOMAINS}
+    - ONLY_SUBDOMAINS=true
+    - VALIDATION=dns
+    - DNSPLUGIN=cloudflare
+    - TZ=Europe/London
+    ports:
+    - "80:80"
+    - "443:443"
+
     
