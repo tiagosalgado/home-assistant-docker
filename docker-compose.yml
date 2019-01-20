@@ -14,7 +14,7 @@ services:
       options:
           max-size: 50m
   hass:
-    image: homeassistant/raspberrypi3-homeassistant:0.82.0
+    image: homeassistant/raspberrypi3-homeassistant:0.85.1
     container_name: "home-assistant"
     network_mode: "host"
     restart: "unless-stopped"
@@ -98,6 +98,9 @@ services:
       - ZONE=${DOCKER_CF_ZONE}
       - SUBDOMAIN=${DOCKER_CF_DOMAIN}
       - PROXIED=false
+    logging:
+      options:
+          max-size: 50m
   letsencrypt:
     image: lsioarmhf/letsencrypt
     container_name: letsencrypt
