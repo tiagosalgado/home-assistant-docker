@@ -65,7 +65,7 @@ services:
       options:
           max-size: 50m
   letsencrypt:
-    image: lsioarmhf/letsencrypt
+    image: linuxserver/letsencrypt
     container_name: letsencrypt
     restart: unless-stopped
     cap_add:
