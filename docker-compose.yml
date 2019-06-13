@@ -14,7 +14,7 @@ services:
       options:
           max-size: 50m
   hass:
-    image: homeassistant/raspberrypi3-homeassistant:0.92.2
+    image: homeassistant/raspberrypi3-homeassistant:0.94.3
     container_name: "home-assistant"
     network_mode: "host"
     restart: "unless-stopped"
@@ -65,7 +65,7 @@ services:
       options:
           max-size: 50m
   letsencrypt:
-    image: linuxserver/letsencrypt
+    image: linuxserver/letsencrypt:latest
     container_name: letsencrypt
     restart: unless-stopped
     cap_add:
@@ -88,7 +88,7 @@ services:
     - "443:443"
 
   unifi-controller:
-    image: linuxserver/unifi-controller:arm32v7-5.10.23-ls15
+    image: linuxserver/unifi-controller:arm32v7-5.10.24-ls20
     container_name: unifi-controller
     environment:
       - PUID=1000
