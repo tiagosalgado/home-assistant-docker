@@ -1,7 +1,7 @@
 version: "3"
 services:
   portainer:
-    image: portainer/portainer:1.21.0
+    image: portainer/portainer:1.22.0
     container_name: "portainer"
     network_mode: "bridge"
     restart: "unless-stopped"
@@ -88,7 +88,7 @@ services:
     - "443:443"
 
   unifi-controller:
-    image: linuxserver/unifi-controller:arm32v7-5.11.39-ls33
+    image: linuxserver/unifi-controller:arm32v7-5.11.50-ls39
     container_name: unifi-controller
     environment:
       - PUID=1000
