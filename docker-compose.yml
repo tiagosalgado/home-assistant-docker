@@ -1,7 +1,7 @@
 version: "3"
 services:
   portainer:
-    image: portainer/portainer:1.22.0
+    image: portainer/portainer:1.24.0
     container_name: "portainer"
     network_mode: "bridge"
     restart: "unless-stopped"
@@ -14,7 +14,7 @@ services:
       options:
           max-size: 50m
   hass:
-    image: homeassistant/raspberrypi3-homeassistant:0.99.2
+    image: homeassistant/raspberrypi3-homeassistant:0.114.0
     container_name: "home-assistant"
     network_mode: "host"
     restart: "unless-stopped"
@@ -65,7 +65,7 @@ services:
       options:
           max-size: 50m
   letsencrypt:
-    image: linuxserver/letsencrypt:latest
+    image: linuxserver/letsencrypt:1.4.0-ls118
     container_name: letsencrypt
     restart: unless-stopped
     cap_add:
@@ -88,7 +88,7 @@ services:
     - "443:443"
 
   unifi-controller:
-    image: linuxserver/unifi-controller:arm32v7-5.11.50-ls39
+    image: linuxserver/unifi-controller:arm32v7-5.13.32-ls69
     container_name: unifi-controller
     environment:
       - PUID=1000
