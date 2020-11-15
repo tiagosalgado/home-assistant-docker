@@ -14,7 +14,7 @@ services:
       options:
           max-size: 50m
   hass:
-    image: homeassistant/raspberrypi3-homeassistant:0.114.0
+    image: homeassistant/raspberrypi3-homeassistant:0.117.1
     container_name: "home-assistant"
     network_mode: "host"
     restart: "unless-stopped"
@@ -88,7 +88,7 @@ services:
     - "443:443"
 
   unifi-controller:
-    image: linuxserver/unifi-controller:arm32v7-5.13.32-ls69
+    image: linuxserver/unifi-controller:version-6.0.28
     container_name: unifi-controller
     environment:
       - PUID=1000
@@ -106,3 +106,26 @@ services:
       - 6789:6789
     restart: unless-stopped
     
+  homebridge:
+    image: oznu/homebridge:debian-raspberry-pi
+    container_name: homebridge
+    restart: always
+    network_mode: host
+    ports:
+      - 8082:8082
+      - 53735:53735
+    environment:
+      - TZ=Europe/London
+      - PGID=1000
+      - PUID=1000
+      - HOMEBRIDGE_CONFIG_UI=1
+      - HOMEBRIDGE_CONFIG_UI_PORT=8082
+      - PACKAGES=ffmpeg
+    volumes: 
+      - "/home/$USER/share/homebridge:/homebridge"
+    
+  airconnect:
+    image: 1activegeek/airconnect:latest-arm
+    container_name: airconnect
+    restart: always
+    network_mode: host
